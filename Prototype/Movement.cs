@@ -8,7 +8,9 @@ public class movement : MonoBehaviour
     public LogicScript logic;
     public float velocityHorizontal = 0f;
     public float velocityVertical = 0f;
-    public float maxVelocity = 1f;
+    public float maxVelocityGround = 1f;
+    public float maxUpSpeed = 5f;
+    public float maxFlySpeed = 10;
     bool previousGround = true;
 
     //f Text;
@@ -37,23 +39,31 @@ public class movement : MonoBehaviour
         if (Input.GetKeyDown("z") == true)
         {
             velocityVertical = Rigidbody.velocity.y + up;
-            Rigidbody.velocity = new Vector2(Rigidbody.velocity.x, velocityVertical);
-          
+            if (velocityVertical > maxUpSpeed)
+            {
+                Rigidbody.velocity = new Vector2(Rigidbody.velocity.x, maxUpSpeed);
+            }
+            else
+            {
+                Rigidbody.velocity = new Vector2(Rigidbody.velocity.x, velocityVertical);
+            }
+
+
 
             if (Input.GetAxis("Horizontal") != 0)
             {
-               /* if (Rigidbody.velocity.x >= maxVelocity)
-                {
-                    velocityHorizontal = maxVelocity;
-                }
-                else if (Rigidbody.velocity.x <= (maxVelocity * -1))
-                {
-                    velocityHorizontal = maxVelocity * -1;
-                }
-                else
-                {*/
+                 if (Rigidbody.velocity.x >= maxFlySpeed && Input.GetAxis("Horizontal") > 0)
+                 {
+                     velocityHorizontal = maxFlySpeed;
+                 }
+                 else if (Rigidbody.velocity.x <= (maxFlySpeed * -1) && Input.GetAxis("Horizontal") < 0)
+                 {
+                     velocityHorizontal = maxFlySpeed * -1;
+                 }
+                 else
+                 {
                     velocityHorizontal = Rigidbody.velocity.x + Input.GetAxis("Horizontal") * speedAir;
-                //}
+                 }
                 Rigidbody.velocity = new Vector2(velocityHorizontal, Rigidbody.velocity.y);
             }
         }
@@ -74,13 +84,13 @@ public class movement : MonoBehaviour
 
             if (Input.GetAxis("Horizontal") != 0)
             {
-                if (Rigidbody.velocity.x >= maxVelocity)
+                if (Rigidbody.velocity.x >= maxVelocityGround)
                 {
-                    velocityHorizontal = maxVelocity;
+                    velocityHorizontal = maxVelocityGround;
                 }
-                else if (Rigidbody.velocity.x <= (maxVelocity * -1))
+                else if (Rigidbody.velocity.x <= (maxVelocityGround * -1))
                 {
-                    velocityHorizontal = maxVelocity * -1;
+                    velocityHorizontal = maxVelocityGround * -1;
                 }
                 else
                 {
